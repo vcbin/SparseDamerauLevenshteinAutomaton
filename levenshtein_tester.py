@@ -56,12 +56,18 @@ states = {}
 transitions = []
 matching = []
 
+
+dfa_word = "ban"
+dfa_n = 1
+from timeit import default_timer as timer
+start_t = timer()
 print
-print "DFA of SparseLevenshteinAutomaton, 'ab', n = 1"
-lev = SparseLevenshteinAutomaton("ab", 1)
+print "DFA of SparseLevenshteinAutomaton, '%s', n = %s" % (dfa_word,dfa_n)
+lev = SparseLevenshteinAutomaton(dfa_word,dfa_n)
 explore(lev, lev.start(), states, counter, matching, transitions)
 
 transitions.sort(key=lambda (i, j, c): i)
+elapsed_t = timer() - start_t
 
 # from graphviz import Digraph
 # graphviz.Digraph("SparseLevenshtein_ab_1")
@@ -75,6 +81,9 @@ for i in matching:
     print '%s [style=filled]' % i
 print "}"
 
+print
+print "time taken: %s" % elapsed_t
+
 
 # use the automaton to build a DamerauLevenshtein DFA
 counter = [0]  # list is a hack for mutable lexical scoping
@@ -82,22 +91,31 @@ states = {}
 transitions = []
 matching = []
 
+
+from timeit import default_timer as timer
+start_t = timer()
 print
-print "DFA of SparseDamerauLevenshteinAutomaton, 'ab', n = 1"
-DL_lev = SparseDamerauLevenshteinAutomaton("ab", 1)
+print "DFA of SparseDamerauLevenshteinAutomaton, '%s', n = %s" % (dfa_word,
+                                                                  dfa_n)
+DL_lev = SparseDamerauLevenshteinAutomaton(dfa_word, dfa_n)
 DL_lev.clear_state()
 exploreSpaDamLev(DL_lev, DL_lev.start(), states,
                  counter, matching, transitions)
 
 transitions.sort(key=lambda (i, j, c): i)
-# output to graphviz
+elapsed_t = timer() - start_t
 
+# output to graphviz
 print "digraph G {"
 for t in transitions:
     print '%s -> %s [label=" %s "]' % t
 for i in matching:
     print '%s [style=filled]' % i
 print "}"
+
+
+print
+print "time taken: %s" % elapsed_t
 
 
 # test code goes from here # words = ["sitting", "kitten", "fitting",
@@ -302,7 +320,7 @@ words = [u"快乐大本营", u"快乐本大营", u"快乐家族", u"快乐购", 
          u"快乐垂钓", u"快乐大本营： 大电影", u"大本营花絮", u"天天向上"]
 weights = [0.9, 0.1, 0.6, 0.7, 0.5, 0.4, 0.3, 0.8, 0.75, 0.85]
 # query_str = "sitting"
-query_str = [u"快乐大本营", u"大本营"]
+query_str = [u"快乐大本营", u"乐快大本营", u"大本营"]
 
 print
 print "DamerauLevenshteinAutomaton test"

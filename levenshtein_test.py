@@ -348,9 +348,11 @@ def exploreSpaDamLev(lev, state,
     if lev.is_match(state):
         matching.append(i)
     for c in lev.transitions(state) | set(['*']):
-        # lev.clear_state() # this line made DamerauLevenshtein identical to # Levenshtein
+        # lev.clear_state() # this line made DamerauLevenshtein identical to #
+        # Levenshtein
         newstate = lev.step(state, c)
-        j = exploreSpaDamLev(lev, newstate, states, counter, matching, transitions)
+        j = exploreSpaDamLev(lev, newstate, states,
+                             counter, matching, transitions)
         transitions.append((i, j, c))
     return i
 
@@ -370,56 +372,83 @@ class LevMatch(object):
             self._word_weight_d = dict(zip(key_list, weight_list))
 
     def print_key_value(self):
-        if (any(self._word_weight_d)):
+        if (self._weight_list):
             from collections import OrderedDict
             word_weight_ord_d = OrderedDict(sorted(self._word_weight_d.items(), key=lambda t: t[
                 1], reverse=True))  # sorted by weight for display
             for k, v in word_weight_ord_d.items():
                 print "%s -> %s" % (k, repr(v).decode("unicode-escape"))
+        else:
+            for k in self._key_list:
+                print "%s" % k
 
     def items(self):
-        return self._word_weight_d.items()
+        if any(self._word_weight_d):
+            return self._word_weight_d.items()
 
     def keys(self, prefix=u"", top_n=10, debug_info=False):
         '''time complexity: $M * N * n$ where $M$ is the total index count and $N$
         is the query string length, and $n$ is the maximum DamerauLevenshtein distance'''
         if (not len(prefix)):
             return self._key_list
+        if not isinstance(prefix, unicode):  # only work for python 2.x
+            assert(isinstance(prefix, str))
+            # convert to unicode object, not working
+            prefix = prefix.decode('utf-8')
         # print "prefix=%s , len = %d" % ( prefix, len(prefix))
         words = self._key_list
         words_lev_l = [SparseLevenshteinAutomaton(
             word, self._n) for word in words]
-        words_lev_d = dict(zip(words, words_lev_l))
         exact_match_res_l = []
         fuzzy_match_res_l = []
         from timeit import default_timer as timer
         start_t = timer()
         for word in words:
             if len(word) and len(prefix) and (
-                (len(prefix) == 1 and prefix[0] != word[0]) or
-                    (len(word) > 1 and prefix[0] !=
-                     word[0] and prefix[1] != word[1])
+                    (
+                            len(prefix) == 1 and prefix[0] != word[0]
+                    ) or (
+                            len(word) > 1 and
+                            prefix[0] != word[0] and prefix[1] != word[1]
+                    )
             ):
-                continue  # it is unlikely that the first two input characters are misspelled
+                continue  # it is unlikely that the first two input characters are misspelled or transposed
             if word == prefix:
                 exact_match_res_l.append(word)
                 continue
-            cur_lev_state = words_lev_d[word].start()
-            for i, cur_c in enumerate(prefix):
-                cur_lev_state = words_lev_d[word].step(cur_lev_state, cur_c)
+            common_len = min(len(prefix), len(word))
+            # match_prefix = []
+            # match_word = []
+            for i in range(common_len):
+                if prefix[i] != word[i]:
+                    # if debug_info:
+                            # print
+                            # print "%d, prefix[i]: %s, word[i]: %s" % (i, prefix[i], word[i])
+                    break
+            # only match the different part to speed up the matching process
+            match_prefix = prefix[i:]
+            match_word = word[i:]
+            # if debug_info:
+                    # print
+                    # print "i= %d, prefix '%s', match_prefix '%s', word '%s', match_word: '%s'" % (i,prefix,match_prefix,word, match_word)
+            lev = SparseLevenshteinAutomaton(
+                match_word, self._n)
+            cur_lev_state = lev.start()
+            for i, cur_c in enumerate(match_prefix):
+                cur_lev_state = lev.step(cur_lev_state, cur_c)
                 # new_lev_state = words_lev_d[word].step(
                 # cur_lev_state, cur_c, prev_lev_state, prev_c)
                 # prev_lev_state = cur_lev_state
                 # cur_lev_state = new_lev_state
                 # prev_c = cur_c
-                if not words_lev_d[word].can_match(cur_lev_state):
+                if not lev.can_match(cur_lev_state):
                     break
                 # print " ",cur_lev_state
 
-            if words_lev_d[word].is_match(cur_lev_state):
+            if lev.is_match(cur_lev_state):
                 # if words_lev_d[word].can_match(cur_lev_state): # NOT correct cause this potentially match a COMPLETELY different/irrelevent word
                 # print cur_lev_state
-                err_num = words_lev_d[word].match_error(cur_lev_state)
+                err_num = lev.match_error(cur_lev_state)
                 # print "%s\t%s" % (type(err_num),err_num)
                 # print "%s, match error char count: %d" % (type(err_num),
                 # err_num)
@@ -457,11 +486,12 @@ class LevMatch(object):
         # res_out = repr(res_l).decode('unicode-escape')
         if debug_info:
             print "\t\tlev distance %d, time: %f" % (self._n, elapsed_t)
-            # print "\t\tmatch result:\t%s" % res_out
-            print "\t\t'%s' -> \t%s" %  \
-                ("".join((prefix)), "\t".join(
-                    ['"' + elem + '"' for elem in res_l]))
-            print
+            if res_l:
+                    # print "\t\tmatch result:\t%s" % res_out
+                    print "\t\t'%s' -> \t%s" %  \
+                        ("".join((prefix)), "\t".join(
+                            ['"' + elem + '"' for elem in res_l]))
+                    print
 
         return res_l
 
@@ -473,44 +503,69 @@ class DamLevMatch(LevMatch):
         is the query string length, and $n$ is the maximum DamerauLevenshtein distance'''
         if (not len(prefix)):
             return self._key_list
+        if not isinstance(prefix, unicode):  # only work for python 2.x
+            assert(isinstance(prefix, str))
+            # convert to unicode object, not working
+            prefix = prefix.decode('utf-8')
         # print "prefix=%s , len = %d" % ( prefix, len(prefix))
         words = self._key_list
-        words_lev_l = [SparseDamerauLevenshteinAutomaton(
-            word, self._n) for word in words]
-        words_lev_d = dict(zip(words, words_lev_l))
+        # words_lev_l = [SparseDamerauLevenshteinAutomaton(
+        # word, self._n) for word in words]
+        # words_lev_d = dict(zip(words, words_lev_l))
         exact_match_res_l = []
         fuzzy_match_res_l = []
         from timeit import default_timer as timer
         start_t = timer()
         for word in words:
             if len(word) and len(prefix) and (
-                (len(prefix) == 1 and prefix[0] != word[0]) or
-                    (len(word) > 1 and prefix[0] !=
-                     word[0] and prefix[1] != word[1])
+                    (
+                            len(prefix) == 1 and prefix[0] != word[0]
+                    ) or (
+                            len(word) > 1 and prefix[0] != word[0] and
+                            prefix[1] != word[1] and
+                            (prefix[0] != word[1] or prefix[1] != word[0])
+                    )
             ):
-                continue  # it is unlikely that the first two input characters are misspelled
+                continue  # it is unlikely that the first two input characters are misspelled or transposed
             if word == prefix:
                 exact_match_res_l.append(word)
                 continue
-            cur_lev_state = words_lev_d[word].start()
+            common_len = min(len(prefix), len(word))
+            # match_prefix = []
+            # match_word = []
+            for i in range(common_len):
+                if prefix[i] != word[i]:
+                    # if debug_info:
+                            # print
+                            # print "%d, prefix[i]: %s, word[i]: %s" % (i, prefix[i], word[i])
+                    break
+            # only match the different part to speed up the matching process
+            match_prefix = prefix[i:]
+            match_word = word[i:]
+            # if debug_info:
+                    # print
+                    # print "i= %d, prefix '%s', match_prefix '%s', word '%s', match_word: '%s'" % (i,prefix,match_prefix,word, match_word)
+            lev = SparseDamerauLevenshteinAutomaton(
+                match_word, self._n)
+            cur_lev_state = lev.start()
             # prev_lev_state = ([], [])
             # prev_c = u""
-            words_lev_d[word].clear_state()
-            for i, cur_c in enumerate(prefix):
-                cur_lev_state = words_lev_d[word].step(cur_lev_state, cur_c)
+            lev.clear_state()
+            for i, cur_c in enumerate(match_prefix):
+                cur_lev_state = lev.step(cur_lev_state, cur_c)
                 # new_lev_state = words_lev_d[word].step(
                 # cur_lev_state, cur_c, prev_lev_state, prev_c)
                 # prev_lev_state = cur_lev_state
                 # cur_lev_state = new_lev_state
                 # prev_c = cur_c
-                if not words_lev_d[word].can_match(cur_lev_state):
+                if not lev.can_match(cur_lev_state):
                     break
                 # print " ",cur_lev_state
 
-            if words_lev_d[word].is_match(cur_lev_state):
+            if lev.is_match(cur_lev_state):
                 # if words_lev_d[word].can_match(cur_lev_state): # NOT correct cause this potentially match a COMPLETELY different/irrelevent word
                 # print cur_lev_state
-                err_num = words_lev_d[word].match_error(cur_lev_state)
+                err_num = lev.match_error(cur_lev_state)
                 # print "%s\t%s" % (type(err_num),err_num)
                 # print "%s, match error char count: %d" % (type(err_num),
                 # err_num)
@@ -549,9 +604,10 @@ class DamLevMatch(LevMatch):
         if debug_info:
             print "\t\tlev distance %d, time: %f" % (self._n, elapsed_t)
             # print "\t\tmatch result:\t%s" % res_out
-            print "\t\t'%s' -> \t%s" %  \
-                ("".join((prefix)), "\t".join(
-                    ['"' + elem + '"' for elem in res_l]))
-            print
+            if res_l:
+                    print "\t\t'%s' -> \t%s" %  \
+                        ("".join((prefix)), "\t".join(
+                            ['"' + elem + '"' for elem in res_l]))
+                    print
 
         return res_l

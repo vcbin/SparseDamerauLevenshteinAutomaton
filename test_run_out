@@ -7,63 +7,93 @@ a [3, 3, 2, 3, 2, 3, 3]
 n [3, 3, 3, 2, 3, 2, 3]
 a [3, 3, 3, 3, 2, 3, 2]
 
-DFA of SparseLevenshteinAutomaton, 'ab', n = 1
+DFA of SparseLevenshteinAutomaton, 'ban', n = 1
 digraph G {
 0 -> 1 [label=" a "]
 0 -> 6 [label=" * "]
-0 -> 8 [label=" b "]
+0 -> 7 [label=" b "]
 1 -> 2 [label=" a "]
-1 -> 2 [label=" * "]
+1 -> 3 [label=" * "]
 1 -> 5 [label=" b "]
+1 -> 4 [label=" n "]
 2 -> 3 [label=" * "]
-2 -> 4 [label=" b "]
+2 -> 4 [label=" n "]
 3 -> 3 [label=" * "]
 4 -> 3 [label=" * "]
-5 -> 4 [label=" * "]
-5 -> 4 [label=" b "]
-6 -> 7 [label=" a "]
+5 -> 2 [label=" a "]
+5 -> 3 [label=" * "]
+6 -> 2 [label=" a "]
 6 -> 3 [label=" * "]
-6 -> 4 [label=" b "]
-7 -> 3 [label=" * "]
-7 -> 4 [label=" b "]
-8 -> 7 [label=" a "]
-8 -> 3 [label=" * "]
-8 -> 4 [label=" b "]
-1 [style=filled]
-2 [style=filled]
+6 -> 5 [label=" b "]
+7 -> 8 [label=" a "]
+7 -> 11 [label=" * "]
+7 -> 11 [label=" b "]
+7 -> 12 [label=" n "]
+8 -> 9 [label=" a "]
+8 -> 9 [label=" * "]
+8 -> 10 [label=" n "]
+9 -> 3 [label=" * "]
+9 -> 4 [label=" n "]
+10 -> 4 [label=" * "]
+10 -> 4 [label=" n "]
+11 -> 2 [label=" a "]
+11 -> 3 [label=" * "]
+11 -> 4 [label=" n "]
+12 -> 2 [label=" a "]
+12 -> 3 [label=" * "]
+12 -> 4 [label=" n "]
 4 [style=filled]
-5 [style=filled]
 8 [style=filled]
+9 [style=filled]
+10 [style=filled]
+12 [style=filled]
 }
 
-DFA of SparseDamerauLevenshteinAutomaton, 'ab', n = 1
+time taken: 0.000570058822632
+
+DFA of SparseDamerauLevenshteinAutomaton, 'ban', n = 1
 digraph G {
 0 -> 1 [label=" a "]
 0 -> 6 [label=" * "]
-0 -> 8 [label=" b "]
+0 -> 7 [label=" b "]
 1 -> 2 [label=" a "]
-1 -> 2 [label=" * "]
+1 -> 3 [label=" * "]
 1 -> 5 [label=" b "]
+1 -> 4 [label=" n "]
 2 -> 3 [label=" * "]
-2 -> 4 [label=" b "]
+2 -> 4 [label=" n "]
 3 -> 3 [label=" * "]
 4 -> 3 [label=" * "]
-5 -> 4 [label=" * "]
-5 -> 4 [label=" b "]
-6 -> 7 [label=" a "]
+5 -> 2 [label=" a "]
+5 -> 3 [label=" * "]
+6 -> 2 [label=" a "]
 6 -> 3 [label=" * "]
-6 -> 4 [label=" b "]
-7 -> 3 [label=" * "]
-7 -> 4 [label=" b "]
-8 -> 2 [label=" a "]
-8 -> 3 [label=" * "]
-8 -> 4 [label=" b "]
-1 [style=filled]
-2 [style=filled]
+6 -> 5 [label=" b "]
+7 -> 8 [label=" a "]
+7 -> 11 [label=" * "]
+7 -> 11 [label=" b "]
+7 -> 12 [label=" n "]
+8 -> 9 [label=" a "]
+8 -> 9 [label=" * "]
+8 -> 10 [label=" n "]
+9 -> 3 [label=" * "]
+9 -> 4 [label=" n "]
+10 -> 4 [label=" * "]
+10 -> 4 [label=" n "]
+11 -> 2 [label=" a "]
+11 -> 3 [label=" * "]
+11 -> 4 [label=" n "]
+12 -> 9 [label=" a "]
+12 -> 3 [label=" * "]
+12 -> 4 [label=" n "]
 4 [style=filled]
-5 [style=filled]
 8 [style=filled]
+9 [style=filled]
+10 [style=filled]
+12 [style=filled]
 }
+
+time taken: 0.000631093978882
 
 SparseLevenshteinAutomaton test
 
@@ -79,58 +109,58 @@ SparseLevenshteinAutomaton test
 快乐本大营 -> 0.1
 
 lev distance = 0
-		lev distance 0, time: 0.000234
+		lev distance 0, time: 0.000218
 		'快乐大本营' -> 	"快乐大本营"	"----"
 
-		lev distance 0, time: 0.000047
+		lev distance 0, time: 0.000040
 		'大本营' -> 	"----"
 
 
 lev distance = 1
-		lev distance 1, time: 0.000439
+		lev distance 1, time: 0.000249
 		'快乐大本营' -> 	"快乐大本营"	"----"
 
-		lev distance 1, time: 0.000067
+		lev distance 1, time: 0.000043
 		'大本营' -> 	"----"
 
 
 lev distance = 2
-	prefix: 快乐大本营, word: 快乐本大营, cur_i: 4, match error count 2
-		lev distance 2, time: 0.000830
+	prefix: 快乐大本营, word: 快乐本大营, cur_i: 2, match error count 2
+		lev distance 2, time: 0.000380
 		'快乐大本营' -> 	"快乐大本营"	"----"	"快乐本大营"
 
-	prefix: 大本营, word: 大本营花絮, cur_i: 2, match error count 2
-		lev distance 2, time: 0.000134
+	prefix: 大本营, word: 大本营花絮, cur_i: 0, match error count 2
+		lev distance 2, time: 0.000098
 		'大本营' -> 	"----"	"大本营花絮"
 
 
 lev distance = 3
-	prefix: 快乐大本营, word: 快乐本大营, cur_i: 4, match error count 2
-	prefix: 快乐大本营, word: 快乐家族, cur_i: 4, match error count 3
-	prefix: 快乐大本营, word: 快乐购, cur_i: 4, match error count 3
-	prefix: 快乐大本营, word: 快乐男声, cur_i: 4, match error count 3
-	prefix: 快乐大本营, word: 快乐中国, cur_i: 4, match error count 3
-	prefix: 快乐大本营, word: 快乐垂钓, cur_i: 4, match error count 3
-		lev distance 3, time: 0.000943
+	prefix: 快乐大本营, word: 快乐本大营, cur_i: 2, match error count 2
+	prefix: 快乐大本营, word: 快乐家族, cur_i: 2, match error count 3
+	prefix: 快乐大本营, word: 快乐购, cur_i: 2, match error count 3
+	prefix: 快乐大本营, word: 快乐男声, cur_i: 2, match error count 3
+	prefix: 快乐大本营, word: 快乐中国, cur_i: 2, match error count 3
+	prefix: 快乐大本营, word: 快乐垂钓, cur_i: 2, match error count 3
+		lev distance 3, time: 0.000547
 		'快乐大本营' -> 	"快乐大本营"	"----"	"快乐购"	"快乐家族"	"快乐男声"	"快乐中国"	"快乐垂钓"	"快乐本大营"
 
-	prefix: 大本营, word: 大本营花絮, cur_i: 2, match error count 2
-		lev distance 3, time: 0.000144
+	prefix: 大本营, word: 大本营花絮, cur_i: 0, match error count 2
+		lev distance 3, time: 0.000098
 		'大本营' -> 	"----"	"大本营花絮"
 
 
 lev distance = 4
-	prefix: 快乐大本营, word: 快乐本大营, cur_i: 4, match error count 2
-	prefix: 快乐大本营, word: 快乐家族, cur_i: 4, match error count 3
-	prefix: 快乐大本营, word: 快乐购, cur_i: 4, match error count 3
-	prefix: 快乐大本营, word: 快乐男声, cur_i: 4, match error count 3
-	prefix: 快乐大本营, word: 快乐中国, cur_i: 4, match error count 3
-	prefix: 快乐大本营, word: 快乐垂钓, cur_i: 4, match error count 3
-		lev distance 4, time: 0.000998
+	prefix: 快乐大本营, word: 快乐本大营, cur_i: 2, match error count 2
+	prefix: 快乐大本营, word: 快乐家族, cur_i: 2, match error count 3
+	prefix: 快乐大本营, word: 快乐购, cur_i: 2, match error count 3
+	prefix: 快乐大本营, word: 快乐男声, cur_i: 2, match error count 3
+	prefix: 快乐大本营, word: 快乐中国, cur_i: 2, match error count 3
+	prefix: 快乐大本营, word: 快乐垂钓, cur_i: 2, match error count 3
+		lev distance 4, time: 0.000579
 		'快乐大本营' -> 	"快乐大本营"	"----"	"快乐购"	"快乐家族"	"快乐男声"	"快乐中国"	"快乐垂钓"	"快乐本大营"
 
-	prefix: 大本营, word: 大本营花絮, cur_i: 2, match error count 2
-		lev distance 4, time: 0.000148
+	prefix: 大本营, word: 大本营花絮, cur_i: 0, match error count 2
+		lev distance 4, time: 0.000098
 		'大本营' -> 	"----"	"大本营花絮"
 
 
@@ -16903,58 +16933,85 @@ DamerauLevenshteinAutomaton test
 快乐本大营 -> 0.1
 
 lev distance = 0
-		lev distance 0, time: 0.000178
+		lev distance 0, time: 0.000213
 		'快乐大本营' -> 	"快乐大本营"	"----"
 
-		lev distance 0, time: 0.000035
+		lev distance 0, time: 0.000171
+		'乐快大本营' -> 	"----"
+
+		lev distance 0, time: 0.000044
 		'大本营' -> 	"----"
 
 
 lev distance = 1
-	prefix: 快乐大本营, word: 快乐本大营, cur_i: 4, match error count 1
-		lev distance 1, time: 0.000372
+	prefix: 快乐大本营, word: 快乐本大营, cur_i: 2, match error count 1
+		lev distance 1, time: 0.000337
 		'快乐大本营' -> 	"快乐大本营"	"----"	"快乐本大营"
 
-		lev distance 1, time: 0.000058
+	prefix: 乐快大本营, word: 快乐大本营, cur_i: 4, match error count 1
+		lev distance 1, time: 0.000545
+		'乐快大本营' -> 	"----"	"快乐大本营"
+
+		lev distance 1, time: 0.000050
 		'大本营' -> 	"----"
 
 
 lev distance = 2
-	prefix: 快乐大本营, word: 快乐本大营, cur_i: 4, match error count 1
-		lev distance 2, time: 0.000518
+	prefix: 快乐大本营, word: 快乐本大营, cur_i: 2, match error count 1
+		lev distance 2, time: 0.000432
 		'快乐大本营' -> 	"快乐大本营"	"----"	"快乐本大营"
 
-	prefix: 大本营, word: 大本营花絮, cur_i: 2, match error count 2
-		lev distance 2, time: 0.000107
+	prefix: 乐快大本营, word: 快乐大本营, cur_i: 4, match error count 1
+	prefix: 乐快大本营, word: 快乐本大营, cur_i: 4, match error count 2
+		lev distance 2, time: 0.000851
+		'乐快大本营' -> 	"----"	"快乐大本营"	"快乐本大营"
+
+	prefix: 大本营, word: 大本营花絮, cur_i: 0, match error count 2
+		lev distance 2, time: 0.000105
 		'大本营' -> 	"----"	"大本营花絮"
 
 
 lev distance = 3
-	prefix: 快乐大本营, word: 快乐本大营, cur_i: 4, match error count 1
-	prefix: 快乐大本营, word: 快乐家族, cur_i: 4, match error count 3
-	prefix: 快乐大本营, word: 快乐购, cur_i: 4, match error count 3
-	prefix: 快乐大本营, word: 快乐男声, cur_i: 4, match error count 3
-	prefix: 快乐大本营, word: 快乐中国, cur_i: 4, match error count 3
-	prefix: 快乐大本营, word: 快乐垂钓, cur_i: 4, match error count 3
-		lev distance 3, time: 0.000720
+	prefix: 快乐大本营, word: 快乐本大营, cur_i: 2, match error count 1
+	prefix: 快乐大本营, word: 快乐家族, cur_i: 2, match error count 3
+	prefix: 快乐大本营, word: 快乐购, cur_i: 2, match error count 3
+	prefix: 快乐大本营, word: 快乐男声, cur_i: 2, match error count 3
+	prefix: 快乐大本营, word: 快乐中国, cur_i: 2, match error count 3
+	prefix: 快乐大本营, word: 快乐垂钓, cur_i: 2, match error count 3
+		lev distance 3, time: 0.000591
 		'快乐大本营' -> 	"快乐大本营"	"----"	"快乐购"	"快乐家族"	"快乐男声"	"快乐中国"	"快乐垂钓"	"快乐本大营"
 
-	prefix: 大本营, word: 大本营花絮, cur_i: 2, match error count 2
-		lev distance 3, time: 0.000105
+	prefix: 乐快大本营, word: 快乐大本营, cur_i: 4, match error count 1
+	prefix: 乐快大本营, word: 快乐本大营, cur_i: 4, match error count 2
+		lev distance 3, time: 0.001106
+		'乐快大本营' -> 	"----"	"快乐大本营"	"快乐本大营"
+
+	prefix: 大本营, word: 大本营花絮, cur_i: 0, match error count 2
+		lev distance 3, time: 0.000106
 		'大本营' -> 	"----"	"大本营花絮"
 
 
 lev distance = 4
-	prefix: 快乐大本营, word: 快乐本大营, cur_i: 4, match error count 1
-	prefix: 快乐大本营, word: 快乐家族, cur_i: 4, match error count 3
-	prefix: 快乐大本营, word: 快乐购, cur_i: 4, match error count 3
-	prefix: 快乐大本营, word: 快乐男声, cur_i: 4, match error count 3
-	prefix: 快乐大本营, word: 快乐中国, cur_i: 4, match error count 3
-	prefix: 快乐大本营, word: 快乐垂钓, cur_i: 4, match error count 3
-		lev distance 4, time: 0.000757
+	prefix: 快乐大本营, word: 快乐本大营, cur_i: 2, match error count 1
+	prefix: 快乐大本营, word: 快乐家族, cur_i: 2, match error count 3
+	prefix: 快乐大本营, word: 快乐购, cur_i: 2, match error count 3
+	prefix: 快乐大本营, word: 快乐男声, cur_i: 2, match error count 3
+	prefix: 快乐大本营, word: 快乐中国, cur_i: 2, match error count 3
+	prefix: 快乐大本营, word: 快乐垂钓, cur_i: 2, match error count 3
+		lev distance 4, time: 0.000594
 		'快乐大本营' -> 	"快乐大本营"	"----"	"快乐购"	"快乐家族"	"快乐男声"	"快乐中国"	"快乐垂钓"	"快乐本大营"
 
-	prefix: 大本营, word: 大本营花絮, cur_i: 2, match error count 2
-		lev distance 4, time: 0.000108
+	prefix: 乐快大本营, word: 快乐大本营, cur_i: 4, match error count 1
+	prefix: 乐快大本营, word: 快乐本大营, cur_i: 4, match error count 2
+	prefix: 乐快大本营, word: 快乐家族, cur_i: 4, match error count 4
+	prefix: 乐快大本营, word: 快乐购, cur_i: 4, match error count 4
+	prefix: 乐快大本营, word: 快乐男声, cur_i: 4, match error count 4
+	prefix: 乐快大本营, word: 快乐中国, cur_i: 4, match error count 4
+	prefix: 乐快大本营, word: 快乐垂钓, cur_i: 4, match error count 4
+		lev distance 4, time: 0.001365
+		'乐快大本营' -> 	"----"	"快乐大本营"	"快乐购"	"快乐家族"	"快乐男声"	"快乐中国"	"快乐垂钓"	"快乐本大营"
+
+	prefix: 大本营, word: 大本营花絮, cur_i: 0, match error count 2
+		lev distance 4, time: 0.000110
 		'大本营' -> 	"----"	"大本营花絮"
 
