@@ -46,7 +46,7 @@ Damerau-Levenshtein DFA, string=*'ab'*, n = 1  , 深色表示accepting state
 
 ### 与[*KMP算法*](http://blog.csdn.net/v_july_v/article/details/7041827)比较
 优点
-  1. 本文实现的*SparseDamerauLevenshtein*速度比[*KMP*](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm)算法快，时间复杂度为*M \* N \* C*, 其中*M*为索引数量， *N*为输入的搜索字符串长度， *C*为设定的最大编辑距离，一般为*1*或者*2*. 而*Kmp*算法时间复杂度为*N + M \* avg_len*, 其中*avg_len*为平均索引长度， *N*是需要匹配前先计算的，由于一般搜索时输入的字符串不会太长，这一项开销可以忽略不计。综上， 比较*SparseDamerauLevenshtein*和*KMP*的时间复杂度实际上就是比较*M \* N*和*M \* avg_len*的复杂度。由于*N*一般都小于索引的平均长度*avg_len*, 所以**实际用于自动完成或者前缀搜索时 *SparseDamerauLevenshtein* 比 *KMP* 算法快**。
+  1. 本文实现的*SparseDamerauLevenshtein*速度比[*KMP*](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm)算法快，时间复杂度为_M * N * C_, 其中*M*为索引数量， *N*为输入的搜索字符串长度， *C*为设定的最大编辑距离，一般为*1*或者*2*. 而*Kmp*算法时间复杂度为_N + M * avg_len_, 其中*avg_len*为平均索引长度， *N*是需要匹配前先计算的，由于一般搜索时输入的字符串不会太长，这一项开销可以忽略不计。综上， 比较*SparseDamerauLevenshtein*和*KMP*的时间复杂度实际上就是比较_M * N_和_M * avg_len_的复杂度。由于*N*一般都小于索引的平均长度*avg_len*, 所以**实际用于自动完成或者前缀搜索时 *SparseDamerauLevenshtein* 比 *KMP* 算法快**。
   
 缺点
   1. **前后缀搜索效果均不如*KMP***(Trie树只能搜索前缀, 基于编辑距离的匹配算法在两个字符串长度相差较大时无能为力)， **尤其是用户输入的搜索字符串较短时.**
