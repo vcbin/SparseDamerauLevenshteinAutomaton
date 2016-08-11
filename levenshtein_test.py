@@ -362,7 +362,7 @@ class LevMatch(object):
     def __init__(self, key_list, n, weight_list=[]):
         for i, title in enumerate(key_list):
             if not isinstance(title, unicode):  # only work for python 2.x
-                assert(isinstance(title, str))
+                assert(isinstance(title, basestring))
                 # convert to unicode object, not working
                 key_list[i] = title.decode('utf-8')
         self._key_list = key_list
@@ -392,7 +392,7 @@ class LevMatch(object):
         if (not len(prefix)):
             return self._key_list
         if not isinstance(prefix, unicode):  # only work for python 2.x
-            assert(isinstance(prefix, str))
+            assert(isinstance(prefix, basestring))
             # convert to unicode object, not working
             prefix = prefix.decode('utf-8')
         # print "prefix=%s , len = %d" % ( prefix, len(prefix))
@@ -504,7 +504,7 @@ class DamLevMatch(LevMatch):
         if (not len(prefix)):
             return self._key_list
         if not isinstance(prefix, unicode):  # only work for python 2.x
-            assert(isinstance(prefix, str))
+            assert(isinstance(prefix, basestring))
             # convert to unicode object, not working
             prefix = prefix.decode('utf-8')
         # print "prefix=%s , len = %d" % ( prefix, len(prefix))
